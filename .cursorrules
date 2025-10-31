@@ -1,0 +1,23 @@
+# RepGo – Project Rules for AI (Cursor)
+
+## Single Source of Truth
+- This project follows **Specification-Driven Development**.
+- The canonical spec is `/docs/poc_spec_v2.md`. Always cite sections.
+- KPIs: `/docs/kpi.md`
+- ADRs: `/docs/adr/0001-architecture.md`
+- (If available) Figma: <FIGMA_URL>
+
+## Hard Rules
+- Do **not** invent behavior outside the spec.
+- If ambiguous, ask for clarification first.
+- Enforce **"No dating intent"** copy where required by spec.
+- Enforce **photo-required** gating for registration/profile.
+
+## Implementation Conventions
+- Use tokens from `apps/mobile/lib/design/tokens.gen.dart`.
+- UI must match Figma spacing within ±4dp.
+- State management: <Riverpod or Bloc> as chosen in ADR.
+- Security: Supabase RLS policies as per spec.
+
+## Output Format
+- Return only changed files (full content) + a short “Changed files” summary.

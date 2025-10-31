@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "codex": "ts-node scripts/codex-run.ts",
+    "codex:task": "ts-node scripts/codex-run.ts"
+  }
+}
