@@ -1,4 +1,5 @@
 name: Build Tokens
+
 on:
   pull_request:
     paths:
@@ -26,7 +27,7 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           version: "9"
-          run_install: false # ここは false のままでOK（下で自前で install しているので）
+          run_install: false
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
