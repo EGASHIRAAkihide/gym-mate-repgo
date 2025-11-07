@@ -14,27 +14,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. リポジトリをチェックアウト
       - name: Checkout
         uses: actions/checkout@v4
 
+      # 2. Node をセットアップ（pnpm用のcache指定）
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "pnpm"
 
+      # 3. pnpm をインストール（ここが超重要）
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: "9"
           run_install: false
 
+      # 4. 依存関係インストール
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # 5. トークン生成
       - name: Build tokens
         run: pnpm run tokens
 
+      # 6. Dart ファイルを Artifact としてアップロード
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
