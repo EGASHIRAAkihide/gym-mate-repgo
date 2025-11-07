@@ -18,29 +18,32 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2. Node をセットアップ（pnpm用のcache指定）
+      # 2. pnpm をセットアップ
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: "9"
+
+      # 3. Node.js をセットアップ（pnpm 用キャッシュ）
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "pnpm"
 
-      # 3. pnpm をインストール（ここが超重要）
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: "9"
-          run_install: true
+      # 4. pnpm が本当に使えるか確認（デバッグ用）
+      - name: Check pnpm
+        run: pnpm -v
 
-      # 4. 依存関係インストール
+      # 5. 依存関係インストール
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # 5. トークン生成
+      # 6. トークン生成
       - name: Build tokens
         run: pnpm run tokens
 
-      # 6. Dart ファイルを Artifact としてアップロード
+      # 7. Dart ファイルを Artifact としてアップロード
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
