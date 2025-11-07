@@ -112,6 +112,71 @@ class DemoScreen extends StatelessWidget {
               style: Theme.of(context).textTheme.headlineMedium),
           const SizedBox(height: 8),
           const _InputDemoGroup(),
+          const SizedBox(height: 24),
+
+          // =========================
+          // Avatars (Token-based)
+          // =========================
+          Text('Avatars (Tokens)',
+              style: Theme.of(context).textTheme.headlineMedium),
+          const SizedBox(height: 8),
+          // サイズバリエーション
+          Row(
+            children: [
+              _Avatar(
+                size: Tokens.space_8, // 32
+                backgroundColor: Color(Tokens.color_neutral_200),
+                label: 'K',
+                type: _AvatarType.initial,
+                status: _AvatarStatus.none,
+              ),
+              const SizedBox(width: 12),
+              _Avatar(
+                size: Tokens.space_12, // 48
+                backgroundColor: Color(Tokens.color_brand_primary),
+                label: 'M',
+                type: _AvatarType.initial,
+                status: _AvatarStatus.online,
+              ),
+              const SizedBox(width: 12),
+              _Avatar(
+                size: Tokens.space_16, // 64
+                backgroundColor: Color(Tokens.color_neutral_200),
+                label: '',
+                type: _AvatarType.placeholder,
+                status: _AvatarStatus.offline,
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          // タイプバリエーション
+          Row(
+            children: [
+              _Avatar(
+                size: Tokens.space_12,
+                backgroundColor: Color(Tokens.color_neutral_200),
+                label: 'A',
+                type: _AvatarType.initial,
+                status: _AvatarStatus.none,
+              ),
+              const SizedBox(width: 12),
+              _Avatar(
+                size: Tokens.space_12,
+                backgroundColor: Color(Tokens.color_neutral_400),
+                label: '',
+                type: _AvatarType.placeholder,
+                status: _AvatarStatus.online,
+              ),
+              const SizedBox(width: 12),
+              _Avatar(
+                size: Tokens.space_12,
+                backgroundColor: Color(Tokens.color_neutral_300),
+                label: '',
+                type: _AvatarType.imageMock,
+                status: _AvatarStatus.none,
+              ),
+            ],
+          ),
           const SizedBox(height: 48),
 
           // =========================
@@ -185,16 +250,32 @@ class _TokenButton extends StatelessWidget {
   });
 
   const _TokenButton.primary({required String label})
-      : this._(label: label, variant: _TokenButtonVariant.primary, disabled: false);
+      : this._(
+          label: label,
+          variant: _TokenButtonVariant.primary,
+          disabled: false,
+        );
 
   const _TokenButton.secondary({required String label})
-      : this._(label: label, variant: _TokenButtonVariant.secondary, disabled: false);
+      : this._(
+          label: label,
+          variant: _TokenButtonVariant.secondary,
+          disabled: false,
+        );
 
   const _TokenButton.ghost({required String label})
-      : this._(label: label, variant: _TokenButtonVariant.ghost, disabled: false);
+      : this._(
+          label: label,
+          variant: _TokenButtonVariant.ghost,
+          disabled: false,
+        );
 
   const _TokenButton.disabled({required String label})
-      : this._(label: label, variant: _TokenButtonVariant.primary, disabled: true);
+      : this._(
+          label: label,
+          variant: _TokenButtonVariant.primary,
+          disabled: true,
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -365,6 +446,105 @@ class _InputDemoGroupState extends State<_InputDemoGroup> {
               vertical: Tokens.space_2,
             ),
             disabledBorder: _border(borderDefault),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Avatar Type
+enum _AvatarType { initial, placeholder, imageMock }
+
+/// Avatar Status
+enum _AvatarStatus { none, online, offline }
+
+/// Avatar 表示用ウィジェット
+class _Avatar extends StatelessWidget {
+  final double size;
+  final Color backgroundColor;
+  final String label;
+  final _AvatarType type;
+  final _AvatarStatus status;
+
+  const _Avatar({
+    required this.size,
+    required this.backgroundColor,
+    required this.label,
+    required this.type,
+    required this.status,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    Widget inner;
+    switch (type) {
+      case _AvatarType.initial:
+        inner = Text(
+          label.isNotEmpty ? label : '?',
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Color(Tokens.color_text_inverse),
+                fontWeight: FontWeight.w600,
+              ),
+        );
+        break;
+      case _AvatarType.placeholder:
+        inner = Icon(
+          Icons.person_outline,
+          color: Color(Tokens.color_text_secondary),
+          size: size * 0.5,
+        );
+        break;
+      case _AvatarType.imageMock:
+        // 本物の画像の代わりにグラデ or 模擬表現
+        inner = Icon(
+          Icons.fitness_center,
+          color: Color(Tokens.color_text_inverse),
+          size: size * 0.5,
+        );
+        break;
+    }
+
+    final avatar = Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(Tokens.radius_full),
+      ),
+      child: Center(child: inner),
+    );
+
+    if (status == _AvatarStatus.none) {
+      return avatar;
+    }
+
+    // Status dot
+    final dotSize = 8.0;
+    final dotColor = switch (status) {
+      _AvatarStatus.online => Color(Tokens.color_semantic_success),
+      _AvatarStatus.offline => Color(Tokens.color_neutral_400),
+      _ => Colors.transparent,
+    };
+
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        avatar,
+        Positioned(
+          right: 0,
+          bottom: 0,
+          child: Container(
+            width: dotSize,
+            height: dotSize,
+            decoration: BoxDecoration(
+              color: dotColor,
+              borderRadius: BorderRadius.circular(dotSize),
+              border: Border.all(
+                color: Color(Tokens.color_background_surface),
+                width: 1.5,
+              ),
+            ),
           ),
         ),
       ],
