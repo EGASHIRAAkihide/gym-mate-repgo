@@ -11,17 +11,29 @@ on:
 jobs:
   build-tokens:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "pnpm"
-      - uses: pnpm/action-setup@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
           version: "9"
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm run tokens
+          run_install: false # ここは false のままでOK（下で自前で install しているので）
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build tokens
+        run: pnpm run tokens
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
