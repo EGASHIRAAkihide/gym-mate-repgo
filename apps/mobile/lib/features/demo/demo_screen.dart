@@ -13,20 +13,34 @@ class DemoScreen extends StatelessWidget {
       body: ListView(
         padding: EdgeInsets.all(Tokens.space_4),
         children: [
-          Text('Brand / Colors', style: Theme.of(context).textTheme.headlineMedium),
+          // =========================
+          // Colors
+          // =========================
+          Text('Brand / Colors',
+              style: Theme.of(context).textTheme.headlineMedium),
           const SizedBox(height: 8),
           Row(
             children: [
-              _Swatch(color: Color(Tokens.color_brand_primary), label: 'brand/primary'),
+              _Swatch(
+                  color: Color(Tokens.color_brand_primary),
+                  label: 'brand/primary'),
               const SizedBox(width: 12),
-              _Swatch(color: Color(Tokens.color_brand_secondary), label: 'brand/secondary'),
+              _Swatch(
+                  color: Color(Tokens.color_brand_secondary),
+                  label: 'brand/secondary'),
               const SizedBox(width: 12),
-              _Swatch(color: Color(Tokens.color_semantic_success), label: 'semantic/success'),
+              _Swatch(
+                  color: Color(Tokens.color_semantic_success),
+                  label: 'semantic/success'),
             ],
           ),
           const SizedBox(height: 24),
 
-          Text('Spacing', style: Theme.of(context).textTheme.headlineMedium),
+          // =========================
+          // Spacing
+          // =========================
+          Text('Spacing',
+              style: Theme.of(context).textTheme.headlineMedium),
           const SizedBox(height: 8),
           Wrap(
             spacing: 8,
@@ -39,7 +53,11 @@ class DemoScreen extends StatelessWidget {
           ),
           const SizedBox(height: 24),
 
-          Text('Policy', style: Theme.of(context).textTheme.headlineMedium),
+          // =========================
+          // Policy (出会い禁止 + 写真必須)
+          // =========================
+          Text('Policy',
+              style: Theme.of(context).textTheme.headlineMedium),
           const SizedBox(height: 8),
           Card(
             child: Padding(
@@ -47,11 +65,17 @@ class DemoScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('安全に関する重要なお知らせ', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600)),
+                  Text('安全に関する重要なお知らせ',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(fontWeight: FontWeight.w600)),
                   const SizedBox(height: 8),
-                  const Text('RepGoは「筋トレ仲間」探しのアプリです。出会い・恋愛目的での利用は禁止です。'),
+                  const Text(
+                      'RepGoは「筋トレ仲間」探しのアプリです。出会い・恋愛目的での利用は禁止です。'),
                   const SizedBox(height: 4),
-                  const Text('登録には本人確認のための顔写真が必須です。安心・安全にご利用ください。'),
+                  const Text(
+                      '登録には本人確認のための顔写真が必須です。安心・安全にご利用ください。'),
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {},
@@ -63,19 +87,36 @@ class DemoScreen extends StatelessWidget {
           ),
           const SizedBox(height: 24),
 
-          Text('Buttons', style: Theme.of(context).textTheme.headlineMedium),
+          // =========================
+          // Buttons (Token-based)
+          // =========================
+          Text('Buttons (Tokens)',
+              style: Theme.of(context).textTheme.headlineMedium),
           const SizedBox(height: 8),
-          Row(
+          Wrap(
+            spacing: 12,
+            runSpacing: 8,
             children: [
-              ElevatedButton(onPressed: () {}, child: const Text('Primary')),
-              const SizedBox(width: 12),
-              OutlinedButton(onPressed: () {}, child: const Text('Outlined')),
-              const SizedBox(width: 12),
-              TextButton(onPressed: () {}, child: const Text('Text')),
+              _TokenButton.primary(label: 'Primary'),
+              _TokenButton.secondary(label: 'Secondary'),
+              _TokenButton.ghost(label: 'Ghost'),
+              _TokenButton.disabled(label: 'Disabled'),
             ],
           ),
+          const SizedBox(height: 24),
+
+          // =========================
+          // Inputs (Token-based)
+          // =========================
+          Text('Inputs (Tokens)',
+              style: Theme.of(context).textTheme.headlineMedium),
+          const SizedBox(height: 8),
+          const _InputDemoGroup(),
           const SizedBox(height: 48),
 
+          // =========================
+          // Icon sample
+          // =========================
           Center(
             child: Icon(Icons.fitness_center, size: 48, color: p),
           ),
@@ -85,6 +126,7 @@ class DemoScreen extends StatelessWidget {
   }
 }
 
+/// カラースウォッチ表示
 class _Swatch extends StatelessWidget {
   final Color color;
   final String label;
@@ -94,7 +136,14 @@ class _Swatch extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(width: 48, height: 48, decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(Tokens.radius_m))),
+        Container(
+          width: 48,
+          height: 48,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(Tokens.radius_m),
+          ),
+        ),
         const SizedBox(height: 4),
         Text(label, style: Theme.of(context).textTheme.bodyMedium),
       ],
@@ -102,6 +151,7 @@ class _Swatch extends StatelessWidget {
   }
 }
 
+/// spacing のバー表示
 class _Box extends StatelessWidget {
   final double w;
   final String label;
@@ -111,9 +161,212 @@ class _Box extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(width: w, height: 12, color: Color(Tokens.color_semantic_info)),
+        Container(
+            width: w,
+            height: 12,
+            color: Color(Tokens.color_semantic_info)),
         const SizedBox(height: 4),
         Text(label, style: Theme.of(context).textTheme.bodyMedium),
+      ],
+    );
+  }
+}
+
+/// Token ベース Button デモ
+class _TokenButton extends StatelessWidget {
+  final String label;
+  final _TokenButtonVariant variant;
+  final bool disabled;
+
+  const _TokenButton._({
+    required this.label,
+    required this.variant,
+    required this.disabled,
+  });
+
+  const _TokenButton.primary({required String label})
+      : this._(label: label, variant: _TokenButtonVariant.primary, disabled: false);
+
+  const _TokenButton.secondary({required String label})
+      : this._(label: label, variant: _TokenButtonVariant.secondary, disabled: false);
+
+  const _TokenButton.ghost({required String label})
+      : this._(label: label, variant: _TokenButtonVariant.ghost, disabled: false);
+
+  const _TokenButton.disabled({required String label})
+      : this._(label: label, variant: _TokenButtonVariant.primary, disabled: true);
+
+  @override
+  Widget build(BuildContext context) {
+    late Color bg;
+    late Color fg;
+    late Color border;
+    switch (variant) {
+      case _TokenButtonVariant.primary:
+        bg = Color(Tokens.color_brand_primary);
+        fg = Color(Tokens.color_text_inverse);
+        border = Colors.transparent;
+        break;
+      case _TokenButtonVariant.secondary:
+        bg = Color(Tokens.color_brand_secondary);
+        fg = Color(Tokens.color_text_inverse);
+        border = Colors.transparent;
+        break;
+      case _TokenButtonVariant.ghost:
+        bg = Colors.transparent;
+        fg = Color(Tokens.color_text_primary);
+        border = Color(Tokens.color_border_subtle);
+        break;
+    }
+
+    if (disabled) {
+      bg = Color(Tokens.color_neutral_200);
+      fg = Color(Tokens.color_neutral_500);
+    }
+
+    final child = Text(
+      label,
+      style: TextStyle(
+        fontSize: Tokens.typography_body_md_fontSize,
+        height: Tokens.typography_body_md_lineHeight,
+        fontWeight: FontWeight.w600,
+        color: fg,
+      ),
+    );
+
+    return InkWell(
+      onTap: disabled ? null : () {},
+      borderRadius: BorderRadius.circular(Tokens.radius_xl),
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: Tokens.space_4,
+          vertical: Tokens.space_3,
+        ),
+        decoration: BoxDecoration(
+          color: bg,
+          borderRadius: BorderRadius.circular(Tokens.radius_xl),
+          border: Border.all(color: border),
+        ),
+        child: child,
+      ),
+    );
+  }
+}
+
+enum _TokenButtonVariant { primary, secondary, ghost }
+
+/// Input デモ用グループ（Default / Error / Disabled）
+class _InputDemoGroup extends StatefulWidget {
+  const _InputDemoGroup();
+
+  @override
+  State<_InputDemoGroup> createState() => _InputDemoGroupState();
+}
+
+class _InputDemoGroupState extends State<_InputDemoGroup> {
+  final _normalController = TextEditingController();
+  final _errorController = TextEditingController();
+  bool _normalHasError = false;
+
+  @override
+  void dispose() {
+    _normalController.dispose();
+    _errorController.dispose();
+    super.dispose();
+  }
+
+  OutlineInputBorder _border(Color color) {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(Tokens.radius_m),
+      borderSide: BorderSide(color: color, width: 1),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bg = Color(Tokens.color_background_surface);
+    final borderDefault = Color(Tokens.color_border_subtle);
+    final borderFocus = Color(Tokens.color_brand_secondary);
+    final borderError = Color(Tokens.color_semantic_error);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Default + validation
+        Text('Default + validation',
+            style: Theme.of(context).textTheme.bodyMedium),
+        const SizedBox(height: 4),
+        TextField(
+          controller: _normalController,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: bg,
+            hintText: 'ニックネームを入力',
+            hintStyle: TextStyle(
+              color: Color(Tokens.color_text_secondary),
+            ),
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: Tokens.space_3,
+              vertical: Tokens.space_2,
+            ),
+            enabledBorder: _border(borderDefault),
+            focusedBorder: _border(_normalHasError ? borderError : borderFocus),
+            errorBorder: _border(borderError),
+            focusedErrorBorder: _border(borderError),
+            errorText: _normalHasError ? '必須項目です' : null,
+          ),
+          onChanged: (v) {
+            setState(() {
+              _normalHasError = v.trim().isEmpty;
+            });
+          },
+        ),
+        const SizedBox(height: 16),
+
+        // Error 固定
+        Text('Error (static)',
+            style: Theme.of(context).textTheme.bodyMedium),
+        const SizedBox(height: 4),
+        TextField(
+          controller: _errorController,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: bg,
+            hintText: 'フォームにエラーがある例',
+            hintStyle: TextStyle(
+              color: Color(Tokens.color_text_secondary),
+            ),
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: Tokens.space_3,
+              vertical: Tokens.space_2,
+            ),
+            enabledBorder: _border(borderError),
+            focusedBorder: _border(borderError),
+            errorText: '形式が正しくありません',
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        // Disabled
+        Text('Disabled',
+            style: Theme.of(context).textTheme.bodyMedium),
+        const SizedBox(height: 4),
+        TextField(
+          enabled: false,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Color(Tokens.color_neutral_100),
+            hintText: '編集できない状態',
+            hintStyle: TextStyle(
+              color: Color(Tokens.color_text_secondary),
+            ),
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: Tokens.space_3,
+              vertical: Tokens.space_2,
+            ),
+            disabledBorder: _border(borderDefault),
+          ),
+        ),
       ],
     );
   }
