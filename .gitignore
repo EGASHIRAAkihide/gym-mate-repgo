@@ -1,0 +1,3 @@
+node_modules/
+design/build/
+apps/mobile/lib/design/tokens.gen.dart

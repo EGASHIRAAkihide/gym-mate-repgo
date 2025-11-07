@@ -1,0 +1,29 @@
+name: Build Tokens
+on:
+  pull_request:
+    paths:
+      - "design/**"
+      - "scripts/generate-dart-tokens.ts"
+  push:
+    paths:
+      - "design/**"
+
+jobs:
+  build-tokens:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+      - uses: pnpm/action-setup@v4
+        with:
+          version: "9"
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run tokens
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tokens-gen
+          path: apps/mobile/lib/design/tokens.gen.dart

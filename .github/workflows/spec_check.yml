@@ -1,0 +1,30 @@
+name: Spec Consistency Check
+on:
+  pull_request:
+    paths:
+      - "apps/**"
+      - "packages/**"
+      - "docs/**"
+jobs:
+  check-spec:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Ensure rules file exists
+        run: |
+          test -f ".cursorrules" -o -f ".cursor/rules/core.md" || \
+          (echo "❌ Missing .cursorrules or .cursor/rules/core.md" && exit 1)
+
+      - name: Ensure spec file exists
+        run: |
+          test -f "docs/poc_spec_v2.md" || \
+          (echo "❌ Missing docs/poc_spec_v2.md" && exit 1)
+
+      - name: PR must reference spec
+        run: |
+          if ! grep -qi "poc_spec_v2.md" <<< "${{ github.event.pull_request.body }}"; then
+            echo "❌ PR body must reference docs/poc_spec_v2.md";
+            exit 1;
+          fi
+      - run: echo "✅ Spec & rules referenced."
