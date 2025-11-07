@@ -180,6 +180,15 @@ class DemoScreen extends StatelessWidget {
           const SizedBox(height: 48),
 
           // =========================
+          // Cards (Token-based)
+          // =========================
+          Text('Cards (Tokens)',
+              style: Theme.of(context).textTheme.headlineMedium),
+          const SizedBox(height: 8),
+          const _CardDemoGroup(),
+          const SizedBox(height: 24),
+
+          // =========================
           // Icon sample
           // =========================
           Center(
@@ -545,6 +554,80 @@ class _Avatar extends StatelessWidget {
                 width: 1.5,
               ),
             ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _CardDemoGroup extends StatelessWidget {
+  const _CardDemoGroup();
+
+  @override
+  Widget build(BuildContext context) {
+    final titleStyle = Theme.of(context).textTheme.titleMedium?.copyWith(
+          fontWeight: FontWeight.w600,
+          color: Color(Tokens.color_text_primary),
+        );
+    final bodyStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: Color(Tokens.color_text_secondary),
+        );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Card / Default', style: Theme.of(context).textTheme.bodyMedium),
+        const SizedBox(height: 4),
+        Container(
+          decoration: BoxDecoration(
+            color: Color(Tokens.color_background_surface),
+            borderRadius: BorderRadius.circular(Tokens.radius_xl),
+            border: Border.all(color: Color(Tokens.color_border_subtle)),
+          ),
+          padding: EdgeInsets.symmetric(
+            horizontal: Tokens.space_4,
+            vertical: Tokens.space_3,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('一緒にトレーニングしませんか？', style: titleStyle),
+              const SizedBox(height: 4),
+              Text(
+                '同じジム・同じ時間帯で通っているユーザーとマッチできます。',
+                style: bodyStyle,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        Text('Card / Emphasis (brand border)',
+            style: Theme.of(context).textTheme.bodyMedium),
+        const SizedBox(height: 4),
+        Container(
+          decoration: BoxDecoration(
+            color: Color(Tokens.color_background_elevated),
+            borderRadius: BorderRadius.circular(Tokens.radius_xl),
+            border: Border.all(color: Color(Tokens.color_brand_secondary)),
+          ),
+          padding: EdgeInsets.symmetric(
+            horizontal: Tokens.space_4,
+            vertical: Tokens.space_3,
+          ),
+          child: Row(
+            children: [
+              Icon(Icons.fitness_center,
+                  size: 20, color: Color(Tokens.color_brand_secondary)),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'あなたのレベルに近いユーザーが3人見つかりました。',
+                  style: bodyStyle,
+                ),
+              ),
+            ],
           ),
         ),
       ],
